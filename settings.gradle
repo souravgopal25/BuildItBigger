@@ -1,0 +1,3 @@
+include ':javajokelib'
+include ':andrjokelibrary'
+include ':app', ':backend'
