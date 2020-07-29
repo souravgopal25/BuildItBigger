@@ -3,6 +3,9 @@ package com.udacity.gradle.builditbigger;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
@@ -11,13 +14,19 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
 
-public class EndpointsAsyncTask extends AsyncTask<Context,Void,String> {
-    private static MyApi myApiService=null;
+public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
+    private static MyApi myApiService = null;
+    private IEndpointAsyncTask mCallback;
     private Context context;
+
+    public EndpointsAsyncTask(IEndpointAsyncTask iEndpointAsyncTask) {
+        mCallback = iEndpointAsyncTask;
+    }
+
 
     @Override
     protected String doInBackground(Context... contexts) {
-        if(myApiService == null) {  // Only do this once
+        if (myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
                     // options for running against local devappserver
@@ -35,12 +44,18 @@ public class EndpointsAsyncTask extends AsyncTask<Context,Void,String> {
             myApiService = builder.build();
         }
 
-        context = contexts[0];
+
         try {
             return myApiService.tellJoke().execute().getData();
         } catch (IOException e) {
-            return  e.getMessage();
+            return e.getMessage();
         }
 
+    }
+
+
+    @Override
+    protected void onPostExecute(String s) {
+        mCallback.onRetrieveJokeFinish(s);
     }
 }

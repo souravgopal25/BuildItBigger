@@ -8,12 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.andrjokelibrary.JokesActivity;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IEndpointAsyncTask {
     private static String mJoke;
 
     @Override
@@ -46,22 +47,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        EndpointsAsyncTask task=new EndpointsAsyncTask();
-        task.execute(this);
-        try{
-            Thread.sleep(5000);
-            mJoke=task.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (mJoke != null) {
-            Intent intent=new Intent(this, JokesActivity.class);
-            intent.putExtra("Joke",mJoke);
-            startActivity(intent);
+        new EndpointsAsyncTask(new IEndpointAsyncTask() {
+            @Override
+            public void onRetrieveJokeFinish(@Nullable String result) {
+                Intent intent = new Intent(MainActivity.this, JokesActivity.class);
+                intent.putExtra(JokesActivity.JOKE, result);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
 
-        }
-
+            }
+        }).execute();
     }
 
 
+    @Override
+    public void onRetrieveJokeFinish(@Nullable String result) {
+        mJoke = result;
+    }
 }

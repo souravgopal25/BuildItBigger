@@ -20,8 +20,8 @@
     <output-test url="file://$MODULE_DIR$/../../../javajokelib/build/classes/java/test" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../javajokelib">
-      <sourceFolder url="file://$MODULE_DIR$/../../../javajokelib/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../javajokelib/src/main/resources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../javajokelib/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../javajokelib/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../../javajokelib/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../javajokelib/src/test/resources" isTestSource="true" />
